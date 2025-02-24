@@ -1,0 +1,16 @@
+BasedOnStyle: LLVM
+BreakBeforeBraces: Attach
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+
+AllowShortIfStatementsOnASingleLine: true
+AllowShortBlocksOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: true
+ReflowComments: false
+ColumnLimit: 80
+
+AlignAfterOpenBracket: BlockIndent
+
+Language: Cpp

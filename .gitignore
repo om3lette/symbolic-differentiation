@@ -1,0 +1,14 @@
+# C++ build process
+build
+coverage
+long-arithmetics
+a.out
+
+# Ide files
+.vscode
+
+# Profilers
+callgrind.out*
+
+# User defined
+notes_*
