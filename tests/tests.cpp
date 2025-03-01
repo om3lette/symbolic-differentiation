@@ -72,6 +72,45 @@ int main(void) {
 	tester_lexer.register_test(
 		[]() {
 			std::vector<Token> answer = {
+
+				{TokenType::LeftParen, "("},   {TokenType::Identifier, "x"},
+				{TokenType::Operator, "+"},	   {TokenType::Number, "2"},
+				{TokenType::RightParen, ")"},  {TokenType::Operator, "*"},
+				{TokenType::Identifier, "var"}
+			};
+			return is_lexer_equal(Lexer("(x + 2)var"), answer);
+		},
+		"(x + 2)var"
+	);
+	tester_lexer.register_test(
+		[]() {
+			std::vector<Token> answer = {
+
+				{TokenType::Number, "10"},	 {TokenType::Operator, "*"},
+				{TokenType::LeftParen, "("}, {TokenType::Identifier, "x"},
+				{TokenType::Operator, "+"},	 {TokenType::Number, "2"},
+				{TokenType::RightParen, ")"}
+			};
+			return is_lexer_equal(Lexer("10(x + 2)"), answer);
+		},
+		"10(x + 2)"
+	);
+	tester_lexer.register_test(
+		[]() {
+			std::vector<Token> answer = {
+
+				{TokenType::LeftParen, "("},  {TokenType::Identifier, "x"},
+				{TokenType::Operator, "+"},	  {TokenType::Number, "2"},
+				{TokenType::RightParen, ")"}, {TokenType::Operator, "*"},
+				{TokenType::Number, "5"}
+			};
+			return is_lexer_equal(Lexer("(x + 2)5"), answer);
+		},
+		"(x + 2)5"
+	);
+	tester_lexer.register_test(
+		[]() {
+			std::vector<Token> answer = {
 				{TokenType::Identifier, "x"}, {TokenType::Operator, "^"},
 				{TokenType::Function, "sin"}, {TokenType::LeftParen, "("},
 				{TokenType::Identifier, "x"}, {TokenType::Operator, "+"},
@@ -126,7 +165,6 @@ int main(void) {
 	test::Tester tester_lexer_format("Lexer formatting");
 	tester_lexer_format.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Number, "3"},
 				{TokenType::Operator, "*"},
@@ -138,7 +176,6 @@ int main(void) {
 	);
 	tester_lexer_format.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Number, "3"},
 				{TokenType::Operator, "*"},
@@ -223,6 +260,23 @@ int main(void) {
 	tester_lexer_except.register_exception_test(
 		create_lexer_iterator(Lexer("ln (23) + 42")),
 		"Reserved keyword usage (ln)"
+	);
+	tester_lexer_except.register_exception_test(
+		create_lexer_iterator(Lexer("x (23) + 42")),
+		"Incorrect syntax. Missing operator after variable"
+	);
+	tester_lexer_except.register_exception_test(
+		create_lexer_iterator(Lexer("(23) y + 42")),
+		"Incorrect syntax. Missing operator before variable"
+	);
+	tester_lexer_except.register_exception_test(
+		create_lexer_iterator(Lexer("(23)) y + 42")), "Parenthesis mismatch #1"
+	);
+	tester_lexer_except.register_exception_test(
+		create_lexer_iterator(Lexer("(23) y + (42")), "Parenthesis mismatch #2"
+	);
+	tester_lexer_except.register_exception_test(
+		create_lexer_iterator(Lexer(")23 y + 42")), "Parenthesis mismatch #3"
 	);
 
 	success &= tester_lexer_except.run_tests();

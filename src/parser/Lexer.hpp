@@ -27,7 +27,11 @@ class Lexer {
   private:
 	std::string input;
 	size_t pos;
+	long parenthesis_cnt;
+
 	bool add_mult;
+	TokenType prev_token_type;
+
 	std::unordered_set<std::string> reserved_words = {
 		"sin", "cos", "ln", "exp"
 	};
