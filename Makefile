@@ -31,8 +31,8 @@ LINK = $(CC) $(LDFLAGS)
 test: $(BUILD_PATH)/test-build
 	$(BUILD_PATH)/test-build
 
-test.build: tests.o $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) | $(BUILD_PATH)
-	$(LINK) $(BUILD_PATH)/tests.o $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) -o $(BUILD_PATH)/test-build
+test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) tests.o | $(BUILD_PATH)
+	$(LINK) $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(BUILD_PATH)/tests.o -o $(BUILD_PATH)/test-build
 
 executable: $(EXPRESSION_OUT_FILES) $(VISITORS_OUT_FILES) | $(BUILD_PATH)
 	$(LINK) $^ -o $(BUILD_PATH)/executable

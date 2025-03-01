@@ -10,6 +10,10 @@
 
 namespace Derivative {
 
+// FIXME
+// template <typename T>
+// using std::unordered_map<std::string, T> = const std::unordered_map<std::string, T>;
+
 template <typename T> class BaseExpression {
   public:
 	virtual ~BaseExpression() = default;
@@ -25,27 +29,41 @@ template <typename T> class BaseExpression {
 template <typename T> class Expression {
   public:
 	Expression(T number);
-	Expression(std::string &variable);
+	Expression(const std::string &variable);
 
-	Expression<T> operator+(const Expression &other);
+	~Expression() = default;
+	Expression(const Expression &other);
+
+	Expression<T> sin(void) const;
+	Expression<T> cos(void) const;
+	Expression<T> ln(void) const;
+	Expression<T> exp(void) const;
+
+	virtual Expression<T> diff(const std::string &by) const;
+	virtual Expression<T>
+	with_values(const std::unordered_map<std::string, T> &values) const;
+	virtual T resolve(void) const;
+	virtual T resolve_with(const std::unordered_map<std::string, T> &values
+	) const;
+	virtual std::string to_string(void) const;
+
+	Expression &operator=(const Expression &other);
+	Expression &operator=(Expression &&other);
+
+	Expression<T> operator+(const Expression &other) const;
 	Expression<T> &operator+=(const Expression &other);
 
-	Expression<T> operator-(const Expression &other);
+	Expression<T> operator-(const Expression &other) const;
 	Expression<T> &operator-=(const Expression &other);
 
-	Expression<T> operator*(const Expression &other);
+	Expression<T> operator*(const Expression &other) const;
 	Expression<T> &operator*=(const Expression &other);
 
-	Expression<T> operator/(const Expression &other);
+	Expression<T> operator/(const Expression &other) const;
 	Expression<T> &operator/=(const Expression &other);
 
-	virtual std::shared_ptr<BaseExpression<T>> diff(const std::string &by
-	) const override;
-	virtual std::shared_ptr<BaseExpression<T>>
-	with_values(const std::unordered_map<std::string, T> &values
-	) const override;
-	virtual T resolve(void) const override;
-	virtual std::string to_string(void) const override;
+	Expression<T> operator^(const Expression &other) const;
+	Expression<T> &operator^=(const Expression &other);
 
   private:
 	Expression(std::shared_ptr<BaseExpression<T>> expression_impl);
