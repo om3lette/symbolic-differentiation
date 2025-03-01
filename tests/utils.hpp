@@ -30,9 +30,13 @@ std::function<bool()> is_within_tolerance(T x, T y, T epsilon = 1e-6) {
 	return [x, y, epsilon]() { return std::abs(x - y) < epsilon; };
 }
 
+bool is_token_equal(const Token &t1, const Token &t2) {
+	return t1.type == t2.type && t1.value == t2.value;
+}
+
 bool is_lexer_equal(Lexer lexer, const std::vector<Token> &answer) {
-	for (auto token : answer) {
-		if (!is_equal(lexer.next_token(), token)) return false;
+	for (size_t i = 0; i < answer.size(); i++) {
+		if (!is_token_equal(lexer.next_token(), answer[i])) return false;
 	};
 	// Only return true if all the Tokens coincided and the end was reached
 	return lexer.next_token().type == TokenType::End;

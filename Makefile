@@ -31,7 +31,7 @@ LINK = $(CC) $(LDFLAGS)
 test: $(BUILD_PATH)/test-build
 	$(BUILD_PATH)/test-build
 
-test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) tests.o | $(BUILD_PATH)
+test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(BUILD_PATH)/tests.o | $(BUILD_PATH)
 	$(LINK) $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(BUILD_PATH)/tests.o -o $(BUILD_PATH)/test-build
 
 executable: $(EXPRESSION_OUT_FILES) $(VISITORS_OUT_FILES) | $(BUILD_PATH)
@@ -49,7 +49,7 @@ $(BUILD_PATH)/%.o: $(SRC_PATH)/expressions/%.cpp | $(BUILD_PATH)
 $(BUILD_PATH)/%.o: $(SRC_PATH)/visitors/%.cpp | $(BUILD_PATH)
 	$(COMPILE) -c $< -o $@
 
-tests.o: $(TESTS_PATH)/tests.cpp | $(BUILD_PATH)
+$(BUILD_PATH)/tests.o: $(TESTS_PATH)/tests.cpp | $(BUILD_PATH)
 	$(COMPILE) $(TESTS_PATH)/tests.cpp -o $(BUILD_PATH)/tests.o
 
 $(BUILD_PATH)/tester.o: $(TESTS_PATH)/Tester.cpp | $(BUILD_PATH)

@@ -14,16 +14,13 @@ enum TokenType {
 	LeftParen,	// Left parenthesis '('
 	RightParen, // Right parenthesis ')'
 	Function,	// Function name (sin, cos, etc)
+	EulerConst,
 	End
 };
 
 struct Token {
 	TokenType type;
 	std::string value;
-
-	bool operator==(const Token &other) const {
-		return type == other.type && value == other.value;
-	}
 };
 
 class Lexer {
@@ -38,6 +35,8 @@ class Lexer {
 	char peek(void) const;
 	void advance(void);
 
+	Token deduce_identifier(const std::string &value);
+
 	bool is_reserved(const std::string &str) const;
 	static std::string to_lower(std::string str);
 
@@ -48,4 +47,4 @@ class Lexer {
 
 } // namespace Derivative
 
-#endif			
+#endif

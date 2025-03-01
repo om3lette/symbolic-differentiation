@@ -27,7 +27,6 @@ int main(void) {
 	);
 	tester_lexer.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Function, "exp"}, {TokenType::LeftParen, "("},
 				{TokenType::Identifier, "x"}, {TokenType::Operator, "+"},
@@ -47,14 +46,38 @@ int main(void) {
 	);
 	tester_lexer.register_test(
 		[]() {
+			std::vector<Token> answer = {
+				{TokenType::EulerConst, "e"}, {TokenType::Operator, "^"},
+				{TokenType::LeftParen, "("},  {TokenType::Identifier, "x"},
+				{TokenType::Operator, "+"},	  {TokenType::Number, "3"},
+				{TokenType::RightParen, ")"}
+			};
+			return is_lexer_equal(Lexer("e^(x + 3)"), answer);
+		},
+		"e^(x + 3) (can also be written as exp(x + 3))"
+	);
+	tester_lexer.register_test(
+		[]() {
 			// [x, *, sin, (, x, +, 2, )]
+			std::vector<Token> answer = {
+				{TokenType::EulerConst, "e"}, {TokenType::Operator, "*"},
+				{TokenType::LeftParen, "("},  {TokenType::Identifier, "x"},
+				{TokenType::Operator, "+"},	  {TokenType::Number, "2"},
+				{TokenType::RightParen, ")"}
+			};
+			return is_lexer_equal(Lexer("e(x + 2)"), answer);
+		},
+		"e(x + 2)"
+	);
+	tester_lexer.register_test(
+		[]() {
 			std::vector<Token> answer = {
 				{TokenType::Identifier, "x"}, {TokenType::Operator, "^"},
 				{TokenType::Function, "sin"}, {TokenType::LeftParen, "("},
 				{TokenType::Identifier, "x"}, {TokenType::Operator, "+"},
 				{TokenType::Number, "2"},	  {TokenType::RightParen, ")"},
-				{TokenType::Operator, "+"},	  {TokenType::RightParen, "3"},
-				{TokenType::Operator, "*"},	  {TokenType::RightParen, "3"},
+				{TokenType::Operator, "+"},	  {TokenType::Number, "3"},
+				{TokenType::Operator, "*"},	  {TokenType::Identifier, "l"},
 			};
 			return is_lexer_equal(Lexer("x ^ sin(x + 2) + 3 * l"), answer);
 		},
@@ -67,7 +90,7 @@ int main(void) {
 				{TokenType::Operator, "*"},
 				{TokenType::Identifier, "x"}
 			};
-			return is_lexer_equal(Lexer("3*x"), answer);
+			return is_lexer_equal(Lexer("3.14*x"), answer);
 		},
 		"3.14 * x (float const)"
 	);
@@ -127,31 +150,28 @@ int main(void) {
 	);
 	tester_lexer_format.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Number, "3"},
 				{TokenType::Operator, "*"},
 				{TokenType::Complex, "i"}
 			};
-			return is_lexer_equal(Lexer("3x"), answer);
+			return is_lexer_equal(Lexer("3*i"), answer);
 		},
 		"3*i (no spaces in between | complex)"
 	);
 	tester_lexer_format.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Number, "3"},
 				{TokenType::Operator, "*"},
 				{TokenType::Complex, "i"}
 			};
-			return is_lexer_equal(Lexer("3x"), answer);
+			return is_lexer_equal(Lexer("3i"), answer);
 		},
 		"3i (no spaces and no operator in between | complex)"
 	);
 	tester_lexer_format.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Number, "3"},
 				{TokenType::Operator, "*"},
@@ -163,7 +183,6 @@ int main(void) {
 	);
 	tester_lexer_format.register_test(
 		[]() {
-			// [x, *, sin, (, x, +, 2, )]
 			std::vector<Token> answer = {
 				{TokenType::Number, "3"},
 				{TokenType::Operator, "*"},
@@ -172,6 +191,18 @@ int main(void) {
 			return is_lexer_equal(Lexer("3     *   x"), answer);
 		},
 		"3     *   x (multiple spaces)"
+	);
+	tester_lexer_format.register_test(
+		[]() {
+			std::vector<Token> answer = {
+				{TokenType::Identifier, "ex"}, {TokenType::Operator, "*"},
+				{TokenType::Identifier, "xe"}, {TokenType::Operator, "+"},
+				{TokenType::EulerConst, "e"},  {TokenType::Operator, "^"},
+				{TokenType::Identifier, "x"}
+			};
+			return is_lexer_equal(Lexer("eX * Xe + e ^ x"), answer);
+		},
+		"eX * Xe + e ^ x"
 	);
 	success &= tester_lexer_format.run_tests();
 

@@ -29,6 +29,12 @@ bool Lexer::is_reserved(const std::string &str) const {
 	return reserved_words.find(str) != reserved_words.end();
 }
 
+Token Lexer::deduce_identifier(const std::string &value) {
+	if (value == "i") return Token(TokenType::Complex, "i");
+	if (value == "e") return Token(TokenType::EulerConst, "e");
+	return Token(TokenType::Identifier, value);
+}
+
 Token Lexer::next_token(void) {
 	if (add_mult) {
 		add_mult = false;
@@ -56,15 +62,19 @@ Token Lexer::next_token(void) {
 			accumulator += peek();
 			advance();
 		};
-		if (peek() == '(')
+		if (peek() == '(') {
+			// Account for x(2 + x) being valid and not a function call
+			if (!is_reserved(accumulator)) {
+				add_mult = true;
+				return deduce_identifier(accumulator);
+			}
 			return Token(TokenType::Function, accumulator);
-		else if (is_reserved(accumulator)) {
+		} else if (is_reserved(accumulator)) {
 			throw std::invalid_argument(
 				"Reserved sequence can not be used as variable name!"
 			);
 		}
-		if (accumulator == "i") return Token(TokenType::Complex, accumulator);
-		return Token(TokenType::Identifier, accumulator);
+		return deduce_identifier(accumulator);
 	};
 	Token return_token;
 	switch (peek()) {
