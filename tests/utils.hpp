@@ -5,6 +5,8 @@
 
 using namespace Derivative;
 
+const long double e = std::exp(1.0L);
+
 template <typename T> std::function<bool()> is_equal(T x, T y) {
 	return [x, y]() { return x == y; };
 }
