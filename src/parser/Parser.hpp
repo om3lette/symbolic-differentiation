@@ -5,25 +5,23 @@
 #include <memory>
 #include <stdexcept>
 
-class Expression;
+// namespace Derivative {
+// class Parser {
+//   private:
+// 	Lexer &lexer;
+// 	Token current_token;
 
-namespace Derivative {
-class Parser {
-  private:
-	Lexer &lexer;
-	Token current_token;
+// 	void consume(TokenType expected);
 
-	void consume(TokenType expected);
+// 	std::shared_ptr<Expression> parsePrimary();
+// 	std::shared_ptr<Expression> parseFactor();
+// 	std::shared_ptr<Expression> parseTerm();
+// 	std::shared_ptr<Expression> parseExpr();
 
-	std::unique_ptr<Expression> parsePrimary();
-	std::unique_ptr<Expression> parseFactor();
-	std::unique_ptr<Expression> parseTerm();
-	std::unique_ptr<Expression> parseExpr();
-
-  public:
-	Parser(Lexer &lexer);
-	std::unique_ptr<Expression> parse();
-};
-} // namespace Derivative
+//   public:
+// 	Parser(Lexer &lexer);
+// 	std::shared_ptr<Expression> parse();
+// };
+// } // namespace Derivative
 
 #endif

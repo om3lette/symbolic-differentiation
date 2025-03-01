@@ -1,32 +1,32 @@
 #include "expressions.hpp"
 
 namespace Derivative {
-template <typename T> Constant<T>::Constant(T value) : value(value){};
+
+template <typename T> Constant<T>::Constant(T number) : value(number){};
 
 template <typename T>
-std::unique_ptr<Constant<T>>
-Constant<T>::diff_impl([[maybe_unused]] const std::string &by) const {
-	return std::make_unique<Constant<T>>(Constant<T>(0));
+std::shared_ptr<BaseExpression<T>>
+Constant<T>::diff([[maybe_unused]] const std::string &by) const {
+	return std::make_shared<Constant<T>>(Constant<T>(0));
 }
 
 template <typename T>
-std::unique_ptr<Constant<T>> Constant<T>::with_values_impl(
+std::shared_ptr<BaseExpression<T>> Constant<T>::with_values(
 	[[maybe_unused]] const std::unordered_map<std::string, T> &values
 ) const {
-	return std::make_unique<Constant<T>>(Constant<T>(value));
+	return std::make_shared<Constant<T>>(Constant<T>(value));
 };
 
-template <typename T>
-std::unique_ptr<Constant<T>> Constant<T>::resolve_impl() const {
-	return std::make_unique<Constant<T>>(value);
-};
+template <typename T> T Constant<T>::resolve() const { return value; };
 
-template <typename T> std::string Constant<T>::to_string_impl(void) const {
-	return std::to_string(value);
+template <typename T> std::string Constant<T>::to_string(void) const {
+	std::ostringstream oss;
+	oss << value;
+	return oss.str();
 };
 
 template <>
-std::string Constant<std::complex<long double>>::to_string_impl(void) const {
+std::string Constant<std::complex<long double>>::to_string(void) const {
 	std::ostringstream oss;
 	bool with_both_parts = false;
 	if (value.imag() == 0 && value.real() == 0)
@@ -50,10 +50,6 @@ std::string Constant<std::complex<long double>>::to_string_impl(void) const {
 	if (with_both_parts) oss << ")";
 	return oss.str();
 }
-
-template <typename T> T Constant<T>::get_value_impl(void) const {
-	return value;
-};
 
 template class Constant<long double>;
 template class Constant<std::complex<long double>>;

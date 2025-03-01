@@ -56,7 +56,8 @@ bool Tester::run_tests(void) {
 	}
 	float correctPercentage =
 		(static_cast<float>(test_success) / tests_total) * 100;
-	std::cout << std::setprecision(2) << std::fixed;
+	// TODO
+	// std::cout << std::setprecision(2) << std::fixed;
 	int color = 32; // Green
 	if (test_success == 0)
 		color = 31; // Red
