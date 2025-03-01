@@ -1024,6 +1024,70 @@ int main(void) {
 	// clang-format on
 	success &= tester_cos.run_tests();
 
+	//==========================================================================
+	test::Tester tester_exp("Exp function");
+	// clang-format off
+	tester_exp.register_test(
+		is_equal(
+			std::make_shared<ExpFunc<long double>>(
+				std::make_shared<Variable<long double>>("x")
+			)->to_string(),
+			std::string("e^(x)")
+		),
+		"to_string e^x"
+	);
+	tester_exp.register_test(
+		is_equal(
+			std::make_shared<ExpFunc<long double>>(
+				std::make_shared<MultOp<long double>>(
+					std::make_shared<Constant<long double>>(4.0L),
+					std::make_shared<Variable<long double>>("x")
+				)
+			)->to_string(),
+			std::string("e^((4) * (x))")
+		),
+		"to_string e^(4 * x)"
+	);
+	tester_exp.register_test(
+		is_within_tolerance(
+			std::make_shared<ExpFunc<long double>>(
+				std::make_shared<MultOp<long double>>(
+					std::make_shared<Constant<long double>>(4.0L),
+					std::make_shared<Variable<long double>>("x")
+				)
+			)->with_values({{"x", 2}})->resolve(),
+			std::pow(e, 8)
+		),
+		"with_values(x = 2) e^(4x) = e^8"
+	);
+	tester_exp.register_test(
+		is_within_tolerance(
+			std::make_shared<ExpFunc<long double>>(
+				std::make_shared<DivOp<long double>>(
+					std::make_shared<Variable<long double>>("x"),
+					std::make_shared<Constant<long double>>(3)
+				)
+			)->with_values({{"x", -1}})->resolve(),
+			std::pow(e, -1.0L / 3)
+		),
+		"with_values(x = -1) e^(x/3) = 1/e^3"
+	);
+	long double e_by_six = e / 6.0L;
+	tester_exp.register_test(
+		is_within_tolerance(
+			std::make_shared<ExpFunc<long double>>(
+				std::make_shared<DivOp<long double>>(
+					std::make_shared<Variable<long double>>("x"),
+					std::make_shared<Constant<long double>>(6)
+				)
+			)->diff("x")->with_values({{"x", 6}})->resolve(),
+			e_by_six
+		),
+		"d/dx e^(x/6) = 1/6 * e^(x/6)"
+	);
+	// clang-format on
+	success &= tester_exp.run_tests();
+
 	if (!success) throw std::logic_error("\033[1;31mSOME TESTS FAILED!\033[0m");
 	std::cout << "\033[1;32m\nALL TESTS PASSED SUCCESSFULLY!\033[0m\n"
 			  << std::endl;
