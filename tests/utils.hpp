@@ -9,6 +9,21 @@ template <typename T> std::function<bool()> is_equal(T x, T y) {
 	return [x, y]() { return x == y; };
 }
 
+template <typename T>
+std::function<bool()> is_equal_complex(
+	const std::complex<T> &a, const std::complex<T> &b, T epsilon = 1e-6
+) {
+	return [a, b, epsilon]() mutable {
+		return std::abs(a.real() - b.real()) < epsilon &&
+			   std::abs(a.imag() - b.imag()) < epsilon;
+	};
+}
+
+template <typename T>
+std::function<bool()> is_within_tolerance(T x, T y, T epsilon = 1e-6) {
+	return [x, y, epsilon]() { return std::abs(x - y) < epsilon; };
+}
+
 bool is_lexer_equal(Lexer lexer, const std::vector<Token> &answer) {
 	for (auto token : answer) {
 		if (!is_equal(lexer.next_token(), token)) return false;
