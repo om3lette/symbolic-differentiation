@@ -2,7 +2,8 @@ CC=g++
 CFLAGS=-c --std=c++23 -Wall -Wextra -Werror -Wundef -pedantic
 LDFLAGS=
 
-BUILD_PATH=build
+BASE_BUILD_PATH=build
+BUILD_PATH=$(BASE_BUILD_PATH)
 COVERAGE_PATH=coverage
 SRC_PATH=src
 TESTS_PATH=tests
@@ -58,6 +59,6 @@ $(BUILD_PATH):
 	mkdir -p $(BUILD_PATH)
 
 clean:
-	rm -rf $(BUILD_PATH) $(COVERAGE_PATH)
+	rm -rf $(BASE_BUILD_PATH) $(COVERAGE_PATH)
 
 .PHONY: all clean $(BUILD_PATH)

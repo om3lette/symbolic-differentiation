@@ -100,6 +100,22 @@ template <typename T> class SinFunc : public BaseExpression<T> {
 	virtual std::string to_string(void) const override;
 };
 
+template <typename T> class CosFunc : public BaseExpression<T> {
+  private:
+	std::shared_ptr<BaseExpression<T>> argument;
+
+  public:
+	explicit CosFunc(std::shared_ptr<BaseExpression<T>> argument);
+
+	virtual std::shared_ptr<BaseExpression<T>> diff(const std::string &by
+	) const override;
+	virtual std::shared_ptr<BaseExpression<T>>
+	with_values(const std::unordered_map<std::string, T> &values
+	) const override;
+	virtual T resolve(void) const override;
+	virtual std::string to_string(void) const override;
+};
+
 template <typename T> class LnFunc : public BaseExpression<T> {
   private:
 	std::shared_ptr<BaseExpression<T>> argument;

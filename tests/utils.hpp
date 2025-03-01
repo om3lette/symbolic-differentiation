@@ -1,4 +1,7 @@
-#pragma once
+#ifndef UTILS_HPP
+#define UTILS_HPP
+
+#include <cmath>
 #include <functional>
 #include <iostream>
 #include <sstream>
@@ -6,6 +9,7 @@
 using namespace Derivative;
 
 const long double e = std::exp(1.0L);
+const long double pi = std::acos(-1.0L);
 
 template <typename T> std::function<bool()> is_equal(T x, T y) {
 	return [x, y]() { return x == y; };
@@ -54,3 +58,4 @@ compare_output(std::function<void()> func, const std::string &expectedValue) {
 		return buffer.str() == expectedValue;
 	};
 }
+#endif
