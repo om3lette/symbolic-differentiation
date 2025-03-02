@@ -10,6 +10,9 @@
 
 namespace Derivative {
 
+// Forward declaration of Parser to use as friend of Expression
+template <typename T> class Parser;
+
 // FIXME
 // template <typename T>
 // using std::unordered_map<std::string, T> = const std::unordered_map<std::string, T>;
@@ -68,6 +71,8 @@ template <typename T> class Expression {
   private:
 	Expression(std::shared_ptr<BaseExpression<T>> expression_impl);
 	std::shared_ptr<BaseExpression<T>> value;
+	// Used to gain access to private constructor
+	friend class Parser<T>;
 };
 
 template <typename T> class Constant : public BaseExpression<T> {

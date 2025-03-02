@@ -116,7 +116,8 @@ Token Lexer::next_token() {
 		// clang-format off
 		if (prev_token_type != TokenType::Operator &&
 			prev_token_type != TokenType::Function &&
-			prev_token_type != TokenType::End)
+			prev_token_type != TokenType::End && 
+			prev_token_type != TokenType::LeftParen)
 			throw std::runtime_error(
 				"Incorrect syntax in Lexer::next_token.\nParenthesis must go "
 				"after function/operator/variable/constant "

@@ -11,8 +11,8 @@ TESTS_PATH=tests
 EXPRESSIONS_IMPL = $(wildcard $(SRC_PATH)/expressions/*.cpp)
 EXPRESSION_OUT_FILES = $(patsubst $(SRC_PATH)/expressions/%.cpp, $(BUILD_PATH)/%.o, $(EXPRESSIONS_IMPL))
 
-VISITORS_IMPL = $(wildcard $(SRC_PATH)/visitors/*.cpp)
-VISITORS_OUT_FILES = $(patsubst $(SRC_PATH)/visitors/%.cpp, $(BUILD_PATH)/%.o, $(VISITORS_IMPL))
+TEST_GROUPS_IMPL = $(wildcard $(TESTS_PATH)/groups/*.cpp)
+TEST_GROUPS_OUT_FILES = $(patsubst $(TESTS_PATH)/groups/%.cpp, $(BUILD_PATH)/%.o, $(TEST_GROUPS_IMPL))
 
 BUILD ?= debug
 
@@ -31,10 +31,10 @@ LINK = $(CC) $(LDFLAGS)
 test: $(BUILD_PATH)/test-build
 	$(BUILD_PATH)/test-build
 
-test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(BUILD_PATH)/tests.o | $(BUILD_PATH)
-	$(LINK) $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(BUILD_PATH)/tests.o -o $(BUILD_PATH)/test-build
+test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(TEST_GROUPS_OUT_FILES) $(BUILD_PATH)/tests.o | $(BUILD_PATH)
+	$(LINK) $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(TEST_GROUPS_OUT_FILES) $(BUILD_PATH)/tests.o -o $(BUILD_PATH)/test-build
 
-executable: $(EXPRESSION_OUT_FILES) $(VISITORS_OUT_FILES) | $(BUILD_PATH)
+executable: $(EXPRESSION_OUT_FILES) | $(BUILD_PATH)
 	$(LINK) $^ -o $(BUILD_PATH)/executable
 
 $(BUILD_PATH)/parser.o: $(SRC_PATH)/parser/Parser.cpp | $(BUILD_PATH)
@@ -46,7 +46,7 @@ $(BUILD_PATH)/lexer.o: $(SRC_PATH)/parser/Lexer.cpp | $(BUILD_PATH)
 $(BUILD_PATH)/%.o: $(SRC_PATH)/expressions/%.cpp | $(BUILD_PATH)
 	$(COMPILE) -c $< -o $@
 
-$(BUILD_PATH)/%.o: $(SRC_PATH)/visitors/%.cpp | $(BUILD_PATH)
+$(BUILD_PATH)/%.o: $(TESTS_PATH)/groups/%.cpp | $(BUILD_PATH)
 	$(COMPILE) -c $< -o $@
 
 $(BUILD_PATH)/tests.o: $(TESTS_PATH)/tests.cpp | $(BUILD_PATH)

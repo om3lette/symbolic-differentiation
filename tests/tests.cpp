@@ -1,11 +1,13 @@
 #include "../src/expressions/expressions.hpp"
 #include "../src/parser/Parser.hpp" // Also includes Lexer.hpp
 #include "Tester.hpp"
+#include "groups/test_groups.hpp"
 #include "utils.hpp"
 #include <limits>
 
 using namespace test;
 using namespace Derivative;
+using namespace utils;
 
 int main(void) {
 	bool success = true;
@@ -241,6 +243,24 @@ int main(void) {
 		},
 		"eX * Xe + e ^ x"
 	);
+	tester_lexer_format.register_test(
+		[]() {
+			std::vector<Token> answer = {
+				{TokenType::LeftParen, "("},  {TokenType::LeftParen, "("},
+				{TokenType::LeftParen, "("},  {TokenType::LeftParen, "("},
+				{TokenType::Number, "10"},	  {TokenType::Operator, "+"},
+				{TokenType::Number, "5"},	  {TokenType::RightParen, ")"},
+				{TokenType::Operator, "*"},	  {TokenType::LeftParen, "("},
+				{TokenType::Number, "2"},	  {TokenType::Operator, "-"},
+				{TokenType::Number, "4"},	  {TokenType::RightParen, ")"},
+				{TokenType::RightParen, ")"}, {TokenType::RightParen, ")"},
+				{TokenType::RightParen, ")"}
+			};
+			return is_lexer_equal(Lexer("((((10 + 5) * (2 - 4))))"), answer);
+		},
+		"((((10 + 5) * (2 - 4))))"
+	);
+
 	success &= tester_lexer_format.run_tests();
 
 	//==========================================================================
@@ -1246,6 +1266,8 @@ int main(void) {
 	);
 
 	success &= tester_expression.run_tests();
+
+	success &= test_parser();
 
 	if (!success) throw std::logic_error("\033[1;31mSOME TESTS FAILED!\033[0m");
 	std::cout << "\033[1;32m\nALL TESTS PASSED SUCCESSFULLY!\033[0m\n"

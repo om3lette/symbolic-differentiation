@@ -8,15 +8,17 @@
 
 using namespace Derivative;
 
-const long double e = std::exp(1.0L);
-const long double pi = std::acos(-1.0L);
+namespace utils {
 
-template <typename T> std::function<bool()> is_equal(T x, T y) {
+inline const long double e = std::exp(1.0L);
+inline const long double pi = std::acos(-1.0L);
+
+template <typename T> inline std::function<bool()> is_equal(T x, T y) {
 	return [x, y]() { return x == y; };
 }
 
 template <typename T>
-std::function<bool()> is_equal_complex(
+inline std::function<bool()> is_equal_complex(
 	const std::complex<T> &a, const std::complex<T> &b, T epsilon = 1e-6
 ) {
 	return [a, b, epsilon]() mutable {
@@ -26,15 +28,15 @@ std::function<bool()> is_equal_complex(
 }
 
 template <typename T>
-std::function<bool()> is_within_tolerance(T x, T y, T epsilon = 1e-6) {
+inline std::function<bool()> is_within_tolerance(T x, T y, T epsilon = 1e-6) {
 	return [x, y, epsilon]() { return std::abs(x - y) < epsilon; };
 }
 
-bool is_token_equal(const Token &t1, const Token &t2) {
+inline bool is_token_equal(const Token &t1, const Token &t2) {
 	return t1.type == t2.type && t1.value == t2.value;
 }
 
-bool is_lexer_equal(Lexer lexer, const std::vector<Token> &answer) {
+inline bool is_lexer_equal(Lexer lexer, const std::vector<Token> &answer) {
 	for (size_t i = 0; i < answer.size(); i++) {
 		if (!is_token_equal(lexer.next_token(), answer[i])) return false;
 	};
@@ -42,14 +44,14 @@ bool is_lexer_equal(Lexer lexer, const std::vector<Token> &answer) {
 	return lexer.next_token().type == TokenType::End;
 }
 
-std::function<void()> create_lexer_iterator(Lexer lexer) {
+inline std::function<void()> create_lexer_iterator(Lexer lexer) {
 	return [lexer]() mutable {
 		// No body intended
 		while (lexer.next_token().type != TokenType::End);
 	};
 }
 
-std::function<bool()>
+inline std::function<bool()>
 compare_output(std::function<void()> func, const std::string &expectedValue) {
 	return [func, expectedValue]() {
 		std::stringstream buffer;
@@ -62,4 +64,5 @@ compare_output(std::function<void()> func, const std::string &expectedValue) {
 		return buffer.str() == expectedValue;
 	};
 }
+} // namespace utils
 #endif

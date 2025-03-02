@@ -6,6 +6,7 @@ a.out
 
 # Ide files
 .vscode
+.VSCodeCounter
 
 # Profilers
 callgrind.out*
