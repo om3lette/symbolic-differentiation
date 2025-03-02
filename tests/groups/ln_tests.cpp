@@ -70,6 +70,24 @@ bool test_ln(void) {
 		),
 		"ln'(x + 10) = 1/(x + 10)"
 	);
+	tester_ln.register_exception_test(
+		[](){
+			std::make_shared<LnFunc<long double>>(
+				std::make_shared<Constant<long double>>(-10.0L)
+			)->resolve();
+		},
+		"ln with negative argument (error)"
+	);
+	tester_ln.register_exception_test(
+		[](){
+			std::make_shared<LnFunc<std::complex<long double>>>(
+				std::make_shared<Constant<std::complex<long double>>>(
+					std::complex<long double>(1.0L, 1.0L)
+				)
+			)->resolve();
+		},
+		"ln with complex argument (error)"
+	);
 	// clang-format on
 	return tester_ln.run_tests();
 }

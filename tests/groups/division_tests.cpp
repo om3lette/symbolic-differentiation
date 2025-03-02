@@ -104,6 +104,15 @@ bool test_division(void) {
             ),
             "diff()->resolve() d/dy x / y / 12 = 12/y"
         );
+        tester_division.register_exception_test(
+            [](){
+                std::make_shared<DivOp<long double>>(
+                    std::make_shared<Variable<long double>>("x"),
+                    std::make_shared<Variable<long double>>("y")
+                )->with_values({{"x", 999},  {"y", 0}})->resolve();
+            },
+            "Division by zero"
+        );
 	// clang-format on
 	return tester_division.run_tests();
 }

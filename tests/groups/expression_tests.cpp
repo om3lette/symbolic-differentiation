@@ -65,6 +65,45 @@ bool test_expression(void) {
 		),
 		"d/dx sin(x)/x = (cos(x) * x - sin(x)) / x^2"
 	);
+	tester_expression.register_test(
+		is_equal(
+			Expression<long double>(Expression<long double>("x").sin())
+				.to_string(),
+			Expression<long double>("x").sin().to_string()
+		),
+		"Expression from Expression"
+	);
+	tester_expression.register_test(
+		is_equal(
+			(Expression<long double>("x") /= 10).resolve_with({{"x", 10}}), 1.0L
+		),
+		"with(x = 10) x /= 10 => 1"
+	);
+	tester_expression.register_test(
+		[]() {
+			Expression<long double> x = Expression<long double>("x");
+			x -= 25;
+			return x.with_values({{"x", 999}}).resolve() == 974.0L;
+		},
+		"Expression with_values"
+	);
+	tester_expression.register_test(
+		[]() {
+			Expression<long double> x("x");
+			Expression<long double> y("y");
+			x = y;
+			return x.resolve_with({{"y", 999}}) == 999.0L;
+		},
+		"Expression copy operator"
+	);
+	tester_expression.register_test(
+		[]() {
+			Expression<long double> y("y");
+			Expression<long double> x(y);
+			return x.resolve_with({{"y", 999}}) == 999.0L;
+		},
+		"Expression copy constructor"
+	);
 
 	return tester_expression.run_tests();
 }

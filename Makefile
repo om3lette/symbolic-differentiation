@@ -14,19 +14,22 @@ EXPRESSION_OUT_FILES = $(patsubst $(SRC_PATH)/expressions/%.cpp, $(BUILD_PATH)/%
 TEST_GROUPS_IMPL = $(wildcard $(TESTS_PATH)/groups/*.cpp)
 TEST_GROUPS_OUT_FILES = $(patsubst $(TESTS_PATH)/groups/%.cpp, $(BUILD_PATH)/%.o, $(TEST_GROUPS_IMPL))
 
-BUILD ?= debug
+RELEASE ?= 0
 
-ifeq ($(BUILD), release)
+ifeq ($(RELEASE), 1)
 	CFLAGS += -O3 -DNDEBUG
-	BUILD_PATH = build/release
 else
 	CFLAGS += -g -Og --coverage
 	LDFLAGS += --coverage
-	BUILD_PATH = build/debug
 endif
 
 COMPILE = $(CC) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS)
+
+coverage: $(BUILD_PATH)/test-build | $(BUILD_PATH)
+	./build/test-build
+	lcov --capture --directory $(BUILD_PATH) --output-file $(BUILD_PATH)/coverage.info;\
+		genhtml $(BUILD_PATH)/coverage.info --output-directory $(COVERAGE_PATH);
 
 test: $(BUILD_PATH)/test-build
 	$(BUILD_PATH)/test-build
