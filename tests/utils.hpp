@@ -1,6 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include "../src/parser/Lexer.hpp"
 #include <cmath>
 #include <functional>
 #include <iostream>

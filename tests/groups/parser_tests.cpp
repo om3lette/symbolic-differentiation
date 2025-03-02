@@ -1,20 +1,8 @@
-#include "../../src/expressions/expressions.hpp"
-#include "../../src/parser/Parser.hpp"
-#include "../Tester.hpp"
-#include "../utils.hpp"
 #include "test_groups.hpp"
 
 using namespace Derivative;
 using namespace utils;
 
-//==========================================================================
-// Lexer l = Lexer("e2");
-// Token m;
-// while (m.type != TokenType::End) {
-// 	m = l.next_token();
-// 	std::cout << m.value << ", ";
-// };
-// std::cout << Parser<long double>("e2").parse().to_string() << std::endl;
 namespace test {
 bool test_parser(void) {
 	test::Tester tester_parser("Parser");
