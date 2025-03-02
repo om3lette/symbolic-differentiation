@@ -17,26 +17,39 @@ Lexer::Lexer(const std::string &s) {
 
 void Lexer::advance() { pos++; }
 
+// Returns current (at index `pos`) character
 char Lexer::peek() const {
 	assert("Index out of range " && pos <= input.size());
 	return input[pos];
 }
 
+// Returns a copy of a given string in lowercase
 std::string Lexer::to_lower(std::string str) {
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 	return str;
 }
 
+// Checks if the given string is in `reserved_words`
 bool Lexer::is_reserved(const std::string &str) const {
 	return reserved_words.find(str) != reserved_words.end();
 }
 
+// Returns the respective identifier Token
+// Possible returned token types:
+// 1. `TokenType::Complex`
+// 2. `TokenType::EulerConst`
+// 3. `TokenType::Identifier`
 Token Lexer::deduce_identifier(const std::string &value) {
-	if (prev_token_type != TokenType::End &&
-		prev_token_type != TokenType::LeftParen &&
-		prev_token_type != TokenType::Operator)
-		throw std::runtime_error("Incorrect syntax in Lexer::next_token.\n "
-								 "Operator is missing or parenthesis");
+	// clang-format off
+	if (
+		prev_token_type != TokenType::End && prev_token_type != TokenType::LeftParen &&
+		prev_token_type != TokenType::Operator
+	) {
+		throw std::runtime_error(
+			"Incorrect syntax in Lexer::next_token.\n Operator is missing or parenthesis"
+		);
+	}
+	// clang-format on
 	if (value == "i") {
 		prev_token_type = TokenType::Complex;
 		return Token(TokenType::Complex, "i");
@@ -49,6 +62,9 @@ Token Lexer::deduce_identifier(const std::string &value) {
 	return Token(TokenType::Identifier, value);
 }
 
+// Parses the string passed on initialization and returns the next `Token` token
+// Throws `std::runtime_error` if the given string is an incorrect equation
+// Throws `std::invalid_argument` if a reserved word is being used as a variable name
 Token Lexer::next_token() {
 	if (add_mult) {
 		add_mult = false;
@@ -96,7 +112,8 @@ Token Lexer::next_token() {
 			return Token(TokenType::Function, accumulator);
 		} else if (is_reserved(accumulator)) {
 			throw std::invalid_argument(
-				"Reserved sequence cannot be used as a variable name!"
+				"Reserved sequence cannot be used as a variable name: " +
+				accumulator
 			);
 		}
 		return deduce_identifier(accumulator);
@@ -114,14 +131,15 @@ Token Lexer::next_token() {
 		break;
 	case '(':
 		// clang-format off
-		if (prev_token_type != TokenType::Operator &&
-			prev_token_type != TokenType::Function &&
-			prev_token_type != TokenType::End && 
-			prev_token_type != TokenType::LeftParen)
+		if (
+			prev_token_type != TokenType::Operator && prev_token_type != TokenType::Function &&
+			prev_token_type != TokenType::End && prev_token_type != TokenType::LeftParen
+		) {
 			throw std::runtime_error(
 				"Incorrect syntax in Lexer::next_token.\nParenthesis must go "
 				"after function/operator/variable/constant "
 			);
+		}
 		// clang-format on
 		return_token = Token(TokenType::LeftParen, "(");
 		parenthesis_cnt++;
@@ -131,7 +149,7 @@ Token Lexer::next_token() {
 		return_token = Token(TokenType::RightParen, ")");
 		break;
 	default:
-		throw std::invalid_argument("Unexpected character");
+		throw std::invalid_argument("Unexpected character: " + peek());
 	}
 	advance();
 

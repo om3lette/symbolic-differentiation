@@ -34,8 +34,11 @@ test: $(BUILD_PATH)/test-build
 test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(TEST_GROUPS_OUT_FILES) $(BUILD_PATH)/tests.o | $(BUILD_PATH)
 	$(LINK) $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(TEST_GROUPS_OUT_FILES) $(BUILD_PATH)/tests.o -o $(BUILD_PATH)/test-build
 
-executable: $(EXPRESSION_OUT_FILES) | $(BUILD_PATH)
-	$(LINK) $^ -o $(BUILD_PATH)/executable
+console-build: $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(BUILD_PATH)/console.o $(EXPRESSION_OUT_FILES)  | $(BUILD_PATH)
+	$(LINK) $^ -o $(BUILD_PATH)/differentiator
+
+$(BUILD_PATH)/console.o: $(SRC_PATH)/console.cpp | $(BUILD_PATH)
+	$(COMPILE) $(SRC_PATH)/console.cpp -o $(BUILD_PATH)/console.o
 
 $(BUILD_PATH)/parser.o: $(SRC_PATH)/parser/Parser.cpp | $(BUILD_PATH)
 	$(COMPILE) $(SRC_PATH)/parser/Parser.cpp -o $(BUILD_PATH)/parser.o

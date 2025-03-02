@@ -18,10 +18,15 @@ template <typename T> class Parser {
 	Token current_token;
 
 	void consume(TokenType expected);
-	std::shared_ptr<BaseExpression<T>> parseExpression();
-	std::shared_ptr<BaseExpression<T>> parseTerm();
-	std::shared_ptr<BaseExpression<T>> parseFactor();
-	std::shared_ptr<BaseExpression<T>> parsePower();
+	std::shared_ptr<BaseExpression<T>> create_function(
+		const std::string &func_name,
+		std::shared_ptr<BaseExpression<T>> argument
+	);
+
+	std::shared_ptr<BaseExpression<T>> parse_expression();
+	std::shared_ptr<BaseExpression<T>> parse_term();
+	std::shared_ptr<BaseExpression<T>> parse_factor();
+	std::shared_ptr<BaseExpression<T>> parse_power();
 	std::shared_ptr<Constant<T>> parse_complex();
 };
 

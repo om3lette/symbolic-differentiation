@@ -13,4 +13,4 @@ callgrind.out*
 
 # User defined
 notes_*
-src/visitors
+src/console.cpp
