@@ -97,6 +97,26 @@ bool test_parser(void) {
 		"(10 + 5) * 2 - 4 = 2 * (10 + 5) - 4"
 	);
 	tester_parser.register_test(
+		is_equal(Parser<long double>("10 - 5 * 2").parse().resolve(), 0.0L),
+		"10 - 5 * 2 = 0"
+	);
+	tester_parser.register_test(
+		is_equal(Parser<long double>("10 - 20 / 2").parse().resolve(), 0.0L),
+		"10 - 20 / 2 = 0"
+	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("10 - 20 / 2 * 5").parse().resolve(), -40.0L
+		),
+		"10 - 20 / 2 * 5 = -40"
+	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("10 - 20 / (2 * 5)").parse().resolve(), 8.0L
+		),
+		"10 - 20 / (2 * 5) = 8"
+	);
+	tester_parser.register_test(
 		is_equal(
 			Parser<long double>("((((10 + 5) * (2 - 4))))").parse().resolve(),
 			-30.0L
