@@ -39,6 +39,11 @@ std::shared_ptr<BaseExpression<T>> AddOp<T>::prettify() const {
 
 	if (is_zero(new_left)) return new_right;
 	if (is_zero(new_right)) return new_left;
+	if (is_const(new_left) && is_const(new_right))
+		return std::make_shared<Constant<T>>(
+			new_left->resolve() + new_right->resolve()
+		);
+
 	return std::make_shared<AddOp<T>>(new_left, new_right);
 }
 

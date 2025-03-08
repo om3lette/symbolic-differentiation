@@ -57,6 +57,11 @@ std::shared_ptr<BaseExpression<T>> PowOp<T>::prettify() const {
 	if (is_zero(new_right) || is_one(new_left))
 		return std::make_shared<Constant<T>>(1.0L);
 	if (is_one(new_right)) return new_left;
+	if (is_const(new_left) && is_const(new_right))
+		return std::make_shared<Constant<T>>(
+			std::pow(new_left->resolve(), new_right->resolve())
+		);
+
 	return std::make_shared<PowOp<T>>(new_left, new_right);
 }
 

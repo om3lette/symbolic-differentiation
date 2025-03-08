@@ -42,6 +42,10 @@ std::shared_ptr<BaseExpression<T>> MultOp<T>::prettify() const {
 	if (is_one(new_right)) return new_left;
 	if (is_zero(new_left) || is_zero(new_right))
 		return std::make_shared<Constant<T>>(0.0L);
+	if (is_const(new_left) && is_const(new_right))
+		return std::make_shared<Constant<T>>(
+			new_left->resolve() * new_right->resolve()
+		);
 
 	return std::make_shared<MultOp<T>>(new_left, new_right);
 }
