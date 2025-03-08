@@ -26,6 +26,8 @@ endif
 COMPILE = $(CC) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS)
 
+all: test.build console.build;
+
 coverage: $(BUILD_PATH)/test-build | $(BUILD_PATH)
 	./build/test-build
 	lcov --capture --directory $(BUILD_PATH) --output-file $(BUILD_PATH)/coverage.info;\
@@ -37,7 +39,7 @@ test: $(BUILD_PATH)/test-build
 test.build: $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(TEST_GROUPS_OUT_FILES) $(BUILD_PATH)/tests.o | $(BUILD_PATH)
 	$(LINK) $(BUILD_PATH)/tester.o $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(EXPRESSION_OUT_FILES) $(TEST_GROUPS_OUT_FILES) $(BUILD_PATH)/tests.o -o $(BUILD_PATH)/test-build
 
-console-build: $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(BUILD_PATH)/console.o $(EXPRESSION_OUT_FILES)  | $(BUILD_PATH)
+console.build: $(BUILD_PATH)/lexer.o $(BUILD_PATH)/parser.o $(BUILD_PATH)/console.o $(EXPRESSION_OUT_FILES)  | $(BUILD_PATH)
 	$(LINK) $^ -o $(BUILD_PATH)/differentiator
 
 $(BUILD_PATH)/console.o: $(SRC_PATH)/console.cpp | $(BUILD_PATH)

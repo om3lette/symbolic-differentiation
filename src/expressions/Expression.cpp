@@ -1,3 +1,4 @@
+#include "../parser/Parser.hpp"
 #include "expressions.hpp"
 
 namespace Derivative {
@@ -13,6 +14,11 @@ Expression<T>::Expression(const std::string &variable)
 template <typename T>
 Expression<T>::Expression(std::shared_ptr<BaseExpression<T>> expression_impl)
 	: value(expression_impl) {}
+
+template <typename T>
+Expression<T> Expression<T>::from_string(const std::string &expression_string) {
+	return Parser<T>(expression_string).parse();
+}
 
 template <typename T>
 Expression<T> &Expression<T>::operator=(Expression &&other) {

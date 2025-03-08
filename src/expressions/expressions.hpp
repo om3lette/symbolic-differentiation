@@ -33,6 +33,7 @@ template <typename T> class Expression {
   public:
 	Expression(T number);
 	Expression(const std::string &variable);
+	static Expression<T> from_string(const std::string &expression_string);
 
 	~Expression() = default;
 	Expression(const Expression &other);

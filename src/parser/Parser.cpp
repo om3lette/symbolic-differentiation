@@ -109,7 +109,6 @@ Parser<std::complex<long double>>::parse_complex() {
 // Parse a term (multiplication and division)
 template <typename T>
 std::shared_ptr<BaseExpression<T>> Parser<T>::parse_term() {
-	// std::shared_ptr<BaseExpression<T>> result;
 	auto result =
 		parse_power(); // Start with parse_power() to handle exponentiation
 	while (current_token.type == TokenType::Operator &&

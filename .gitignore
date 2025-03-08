@@ -13,4 +13,3 @@ callgrind.out*
 
 # User defined
 notes_*
-src/console.cpp
