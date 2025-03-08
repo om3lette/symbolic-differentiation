@@ -105,6 +105,20 @@ bool test_power(void) {
 		),
 		"diff()->resolve() d/dy (x + 1)^3 = 3(x + 1)^2"
 	);
+	tester_power.register_test(
+		is_equal(
+			Parser<long double>("x^2x").parse().resolve_with({{"x", 2.0L}}),
+			8.0L
+		),
+		"x^2x = (x^2) * x"
+	);
+	tester_power.register_test(
+		is_equal(
+			Parser<long double>("x^(2x)").parse().resolve_with({{"x", 2.0L}}),
+			16.0L
+		),
+		"x^(2x) = x^(2x)"
+	);
 	// clang-format on
 	return tester_power.run_tests();
 }

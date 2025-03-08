@@ -25,9 +25,7 @@ Variable<T>::with_values(const std::unordered_map<std::string, T> &values
 };
 
 template <typename T> T Variable<T>::resolve() const {
-	throw std::runtime_error(
-		"Variable cannot be resolved. Call with_values first!"
-	);
+	throw std::runtime_error("Variable cannot be resolved: " + value);
 };
 
 template <typename T> std::string Variable<T>::to_string(void) const {

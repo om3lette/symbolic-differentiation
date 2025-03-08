@@ -243,6 +243,15 @@ bool test_parser(void) {
 		),
 		"Uppercase variable and functions (should be converted to lower)"
 	);
+	tester_parser.register_test(
+		is_within_tolerance(
+			Parser<long double>("e^xcos(x)")
+				.parse()
+				.resolve_with({{"x", 1.0L}, {"xcos", 1.0L}}),
+			e
+		),
+		"Uppercase variable and functions (should be converted to lower)"
+	);
 	return tester_parser.run_tests();
 }
 } // namespace test
