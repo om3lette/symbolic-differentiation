@@ -31,6 +31,17 @@ template <typename T> std::string CosFunc<T>::to_string(void) const {
 	return "cos(" + argument->to_string() + ")";
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> CosFunc<T>::prettify() const {
+	std::shared_ptr<BaseExpression<T>> new_arg = argument->prettify();
+
+	// clang-format off
+	if (is_const(new_arg))
+		return std::make_shared<Constant<T>>(std::cos(new_arg->resolve()));
+	// clang-format on
+	return std::make_shared<CosFunc<T>>(new_arg);
+}
+
 template class CosFunc<long double>;
 template class CosFunc<std::complex<long double>>;
 } // namespace Derivative

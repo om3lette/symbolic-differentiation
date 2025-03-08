@@ -20,11 +20,11 @@ std::string run_task(
 	const std::string &diff_by, const VarMap &values
 ) {
 	std::stringstream oss;
-	if (to_diff) oss << "Differentiated: " << expr.diff(diff_by).to_string();
+	if (to_diff)
+		oss << "Differentiated: " << expr.diff(diff_by).prettify().to_string();
 	if (to_eval) oss << "Evaluated: " << expr.resolve_with(values);
 	return oss.str();
 }
-
 int main(int argc, char *argv[]) {
 	std::string expression_string, diff_by;
 	bool eval_expr = false, diff_expr = false, contains_complex = false;

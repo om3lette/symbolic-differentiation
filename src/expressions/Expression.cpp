@@ -131,6 +131,10 @@ template <typename T> std::string Expression<T>::to_string(void) const {
 	return value->to_string();
 }
 
+template <typename T> Expression<T> Expression<T>::prettify() const {
+	return Expression<T>(value->prettify());
+}
+
 template class Expression<long double>;
 template class Expression<std::complex<long double>>;
 } // namespace Derivative

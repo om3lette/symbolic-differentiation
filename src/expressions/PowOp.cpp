@@ -48,6 +48,18 @@ template <typename T> std::string PowOp<T>::to_string(void) const {
 	return "(" + left->to_string() + ") ^ (" + right->to_string() + ")";
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> PowOp<T>::prettify() const {
+	auto new_left = left->prettify();
+	auto new_right = right->prettify();
+
+	if (is_zero(new_left)) return std::make_shared<Constant<T>>(0.0L);
+	if (is_zero(new_right) || is_one(new_left))
+		return std::make_shared<Constant<T>>(1.0L);
+	if (is_one(new_right)) return new_left;
+	return std::make_shared<PowOp<T>>(new_left, new_right);
+}
+
 template class PowOp<long double>;
 template class PowOp<std::complex<long double>>;
 } // namespace Derivative

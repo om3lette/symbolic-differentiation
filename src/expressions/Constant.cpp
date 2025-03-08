@@ -51,6 +51,11 @@ std::string Constant<std::complex<long double>>::to_string(void) const {
 	return oss.str();
 }
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> Constant<T>::prettify() const {
+	return std::make_shared<Constant<T>>(value);
+}
+
 template class Constant<long double>;
 template class Constant<std::complex<long double>>;
 } // namespace Derivative

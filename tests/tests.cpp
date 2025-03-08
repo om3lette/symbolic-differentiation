@@ -9,6 +9,11 @@ using namespace test;
 using namespace Derivative;
 using namespace utils;
 
+// The ultimate prettify test
+// make console.build && build/differentiator --diff "(x^4) * sin(x^3) + (e^x) * cos(x^2) + sin(x)/x^2 + cos(x)ln(x + 1)" --by x
+// 523 symbols to_string(): (((((((x) ^ (4)) * (((0) * (ln(x)) + ((4) * (1)) / (x)))) * (sin((x) ^ (3))) + ((x) ^ (4)) * ((cos((x) ^ (3))) * (((x) ^ (3)) * (((0) * (ln(x)) + ((3) * (1)) / (x)))))) + (((e^(x)) * (1)) * (cos((x) ^ (2))) + (e^(x)) * (((-1) * (sin((x) ^ (2)))) * (((x) ^ (2)) * (((0) * (ln(x)) + ((2) * (1)) / (x))))))) + ((((cos(x)) * (1)) * ((x) ^ (2)) - (sin(x)) * (((x) ^ (2)) * (((0) * (ln(x)) + ((2) * (1)) / (x)))))) / (((x) ^ (2)) ^ (2))) + ((((-1) * (sin(x))) * (1)) * (ln((x + 1))) + (cos(x)) * (((1) / ((x + 1))) * ((1 + 0)))))
+// 381 symbols prettify().to_string() Iteration 1: (((((((x) ^ (4)) * ((4) / (x))) * (sin((x) ^ (3))) + ((x) ^ (4)) * ((cos((x) ^ (3))) * (((x) ^ (3)) * ((3) / (x))))) + ((e^(x)) * (cos((x) ^ (2))) + (e^(x)) * (((-1) * (sin((x) ^ (2)))) * (((x) ^ (2)) * ((2) / (x)))))) + (((cos(x)) * ((x) ^ (2)) - (sin(x)) * (((x) ^ (2)) * ((2) / (x))))) / (((x) ^ (2)) ^ (2))) + (((-1) * (sin(x))) * (ln((x + 1))) + (cos(x)) * ((1) / ((x + 1)))))
+
 int main(void) {
 	bool success = true;
 

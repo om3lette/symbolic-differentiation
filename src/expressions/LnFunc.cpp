@@ -39,6 +39,17 @@ template <typename T> std::string LnFunc<T>::to_string(void) const {
 	return "ln(" + argument->to_string() + ")";
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> LnFunc<T>::prettify() const {
+	std::shared_ptr<BaseExpression<T>> new_arg = argument->prettify();
+
+	// clang-format off
+	if (is_const(new_arg))
+		return std::make_shared<Constant<T>>(std::log(new_arg->resolve()));
+	// clang-format on
+	return std::make_shared<LnFunc<T>>(new_arg);
+}
+
 template class LnFunc<long double>;
 template class LnFunc<std::complex<long double>>;
 } // namespace Derivative

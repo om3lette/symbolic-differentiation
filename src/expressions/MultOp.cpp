@@ -33,6 +33,19 @@ template <typename T> std::string MultOp<T>::to_string(void) const {
 	return "(" + left->to_string() + ") * (" + right->to_string() + ")";
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> MultOp<T>::prettify() const {
+	auto new_left = left->prettify();
+	auto new_right = right->prettify();
+
+	if (is_one(new_left)) return new_right;
+	if (is_one(new_right)) return new_left;
+	if (is_zero(new_left) || is_zero(new_right))
+		return std::make_shared<Constant<T>>(0.0L);
+
+	return std::make_shared<MultOp<T>>(new_left, new_right);
+}
+
 template class MultOp<long double>;
 template class MultOp<std::complex<long double>>;
 } // namespace Derivative

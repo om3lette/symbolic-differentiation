@@ -1,6 +1,8 @@
 #ifndef EXPRESSIONS_HPP
 #define EXPRESSIONS_HPP
 
+#include "expressions_utils.hpp"
+
 #include <complex>
 #include <iostream>
 #include <memory>
@@ -25,6 +27,7 @@ template <typename T> class BaseExpression {
 	) const = 0;
 	virtual std::shared_ptr<BaseExpression<T>>
 	with_values(const std::unordered_map<std::string, T> &values) const = 0;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const = 0;
 	virtual T resolve(void) const = 0;
 	virtual std::string to_string(void) const = 0;
 };
@@ -43,31 +46,31 @@ template <typename T> class Expression {
 	Expression<T> ln(void) const;
 	Expression<T> exp(void) const;
 
-	virtual Expression<T> diff(const std::string &by) const;
-	virtual Expression<T>
-	with_values(const std::unordered_map<std::string, T> &values) const;
-	virtual T resolve(void) const;
-	virtual T resolve_with(const std::unordered_map<std::string, T> &values
+	Expression<T> diff(const std::string &by) const;
+	Expression<T> with_values(const std::unordered_map<std::string, T> &values
 	) const;
-	virtual std::string to_string(void) const;
+	T resolve(void) const;
+	T resolve_with(const std::unordered_map<std::string, T> &values) const;
+	std::string to_string(void) const;
+	Expression<T> prettify(void) const;
 
-	Expression &operator=(const Expression &other);
-	Expression &operator=(Expression &&other);
+	Expression<T> &operator=(const Expression<T> &other);
+	Expression<T> &operator=(Expression<T> &&other);
 
-	Expression<T> operator+(const Expression &other) const;
-	Expression<T> &operator+=(const Expression &other);
+	Expression<T> operator+(const Expression<T> &other) const;
+	Expression<T> &operator+=(const Expression<T> &other);
 
-	Expression<T> operator-(const Expression &other) const;
-	Expression<T> &operator-=(const Expression &other);
+	Expression<T> operator-(const Expression<T> &other) const;
+	Expression<T> &operator-=(const Expression<T> &other);
 
-	Expression<T> operator*(const Expression &other) const;
-	Expression<T> &operator*=(const Expression &other);
+	Expression<T> operator*(const Expression<T> &other) const;
+	Expression<T> &operator*=(const Expression<T> &other);
 
-	Expression<T> operator/(const Expression &other) const;
-	Expression<T> &operator/=(const Expression &other);
+	Expression<T> operator/(const Expression<T> &other) const;
+	Expression<T> &operator/=(const Expression<T> &other);
 
-	Expression<T> operator^(const Expression &other) const;
-	Expression<T> &operator^=(const Expression &other);
+	Expression<T> operator^(const Expression<T> &other) const;
+	Expression<T> &operator^=(const Expression<T> &other);
 
   private:
 	Expression(std::shared_ptr<BaseExpression<T>> expression_impl);
@@ -90,6 +93,7 @@ template <typename T> class Constant : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class Variable : public BaseExpression<T> {
@@ -106,6 +110,7 @@ template <typename T> class Variable : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class SinFunc : public BaseExpression<T> {
@@ -122,6 +127,7 @@ template <typename T> class SinFunc : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class CosFunc : public BaseExpression<T> {
@@ -138,6 +144,7 @@ template <typename T> class CosFunc : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class LnFunc : public BaseExpression<T> {
@@ -154,6 +161,7 @@ template <typename T> class LnFunc : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class ExpFunc : public BaseExpression<T> {
@@ -170,6 +178,7 @@ template <typename T> class ExpFunc : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class AddOp : public BaseExpression<T> {
@@ -190,6 +199,7 @@ template <typename T> class AddOp : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class MultOp : public BaseExpression<T> {
@@ -210,6 +220,7 @@ template <typename T> class MultOp : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class SubOp : public BaseExpression<T> {
@@ -230,6 +241,7 @@ template <typename T> class SubOp : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class DivOp : public BaseExpression<T> {
@@ -250,6 +262,7 @@ template <typename T> class DivOp : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 
 template <typename T> class PowOp : public BaseExpression<T> {
@@ -270,6 +283,7 @@ template <typename T> class PowOp : public BaseExpression<T> {
 	) const override;
 	virtual T resolve(void) const override;
 	virtual std::string to_string(void) const override;
+	virtual std::shared_ptr<BaseExpression<T>> prettify(void) const override;
 };
 } // namespace Derivative
 

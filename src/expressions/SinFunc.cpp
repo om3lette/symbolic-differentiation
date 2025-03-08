@@ -28,6 +28,17 @@ template <typename T> std::string SinFunc<T>::to_string(void) const {
 	return "sin(" + argument->to_string() + ")";
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> SinFunc<T>::prettify() const {
+	std::shared_ptr<BaseExpression<T>> new_arg = argument->prettify();
+
+	// clang-format off
+	if (is_const(new_arg))
+		return std::make_shared<Constant<T>>(std::sin(new_arg->resolve()));
+	// clang-format on
+	return std::make_shared<SinFunc<T>>(new_arg);
+}
+
 template class SinFunc<long double>;
 template class SinFunc<std::complex<long double>>;
 } // namespace Derivative

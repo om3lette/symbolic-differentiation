@@ -39,6 +39,17 @@ template <typename T> std::string DivOp<T>::to_string(void) const {
 	return "(" + left->to_string() + ") / (" + right->to_string() + ")";
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> DivOp<T>::prettify() const {
+	auto new_left = left->prettify();
+	auto new_right = right->prettify();
+
+	if (is_one(new_right)) return new_left;
+	if (is_zero(new_left)) return std::make_shared<Constant<T>>(0.0L);
+
+	return std::make_shared<DivOp<T>>(new_left, new_right);
+}
+
 template class DivOp<long double>;
 template class DivOp<std::complex<long double>>;
 } // namespace Derivative

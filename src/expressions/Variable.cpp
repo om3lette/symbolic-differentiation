@@ -32,6 +32,11 @@ template <typename T> std::string Variable<T>::to_string(void) const {
 	return value;
 };
 
+template <typename T>
+std::shared_ptr<BaseExpression<T>> Variable<T>::prettify() const {
+	return std::make_shared<Variable<T>>(value);
+}
+
 template class Variable<long double>;
 template class Variable<std::complex<long double>>;
 } // namespace Derivative
