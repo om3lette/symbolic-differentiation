@@ -1,4 +1,5 @@
 #include "Lexer.hpp"
+#include "../string_utils.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -8,7 +9,7 @@
 namespace Derivative {
 
 Lexer::Lexer(const std::string &s) {
-	input = Lexer::to_lower(s);
+	input = to_lower(s);
 	pos = 0;
 	add_mult = false;
 	parenthesis_cnt = 0;
@@ -21,12 +22,6 @@ void Lexer::advance() { pos++; }
 char Lexer::peek() const {
 	assert("Index out of range " && pos <= input.size());
 	return input[pos];
-}
-
-// Returns a copy of a given string in lowercase
-std::string Lexer::to_lower(std::string str) {
-	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-	return str;
 }
 
 // Checks if the given string is in `reserved_words`

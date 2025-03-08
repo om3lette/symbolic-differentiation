@@ -104,6 +104,14 @@ bool test_expression(void) {
 		},
 		"Expression copy constructor"
 	);
+	tester_expression.register_test(
+		is_equal(
+			Expression<long double>("UpPeRcAsE_nAmE")
+				.resolve_with({{"uppercase_name", 42.0L}}),
+			42.0L
+		),
+		"Uppercase variable is treated as lower case"
+	);
 
 	return tester_expression.run_tests();
 }

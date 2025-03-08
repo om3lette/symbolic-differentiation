@@ -232,6 +232,17 @@ bool test_parser(void) {
 		),
 		"(x + 10)(x + 10) 'Parenthesis multiplication'"
 	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>(
+				"5(LoNg_Var_NaMe + 10)10(x + 10)5 + SIN(x)^2 + COS(x)^2"
+			)
+				.parse()
+				.resolve_with({{"x", 2.0L}, {"long_var_name", 10.0L}}),
+			60001.0L
+		),
+		"Uppercase variable and functions (should be converted to lower)"
+	);
 	return tester_parser.run_tests();
 }
 } // namespace test

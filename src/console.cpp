@@ -1,4 +1,6 @@
 #include "./expressions/expressions.hpp"
+#include "string_utils.hpp"
+
 #include <iostream>
 #include <regex>
 #include <stdexcept>
@@ -44,19 +46,19 @@ int main(int argc, char *argv[]) {
 			diff_by = argv[i];
 		} else if (arg.find("=") != std::string::npos) {
 			auto pos = arg.find("=");
-			std::string var = arg.substr(0, pos), val_str = arg.substr(pos + 1);
+			std::string var_name = to_lower(arg.substr(0, pos)),
+						val_str = arg.substr(pos + 1);
 			contains_complex |= is_complex(val_str);
 			try {
 				std::smatch match;
-				if (std::regex_match(val_str, match, complex_regex)) {
+				if (contains_complex &&
+					std::regex_match(val_str, match, complex_regex)) {
 					long double real_part = std::stold(match[1].str());
 					long double imag_part = std::stold(match[2].str());
-					complex_variables[var] =
+					complex_variables[var_name] =
 						std::complex<long double>(real_part, imag_part);
 				} else {
-					throw std::invalid_argument(
-						"Invalid complex number format: " + val_str
-					);
+					variables[var_name] = std::stold(val_str);
 				}
 			} catch (...) {
 				throw std::invalid_argument("Invalid value: " + val_str);

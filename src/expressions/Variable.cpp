@@ -1,13 +1,14 @@
+#include "../string_utils.hpp"
 #include "expressions.hpp"
 
 namespace Derivative {
 
-template <typename T> Variable<T>::Variable(std::string var) : value(var){};
+template <typename T>
+Variable<T>::Variable(std::string var) : value(to_lower(var)){};
 
 template <typename T>
-std::shared_ptr<BaseExpression<T>>
-// TODO: Make lowercase
-Variable<T>::diff(const std::string &by) const {
+std::shared_ptr<BaseExpression<T>> Variable<T>::diff(const std::string &by
+) const {
 	if (by == value) {
 		return std::make_shared<Constant<T>>(Constant<T>(1));
 	}
