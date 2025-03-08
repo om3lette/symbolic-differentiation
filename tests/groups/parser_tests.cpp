@@ -187,6 +187,51 @@ bool test_parser(void) {
 		"with(x = 2 + 2i, y = 10 + 17i) -5x(4 + 2i) / 4y(-2 + i) = 1475 + "
 		"562.5i"
 	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("e2").parse().resolve_with({{"e2", 24.0L}}),
+			24.0L
+		),
+		"e2 - variable with digit in name"
+	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("e_2").parse().resolve_with({{"e_2", 24.0L}}),
+			24.0L
+		),
+		"e_2 - variable with digit and special character in name"
+	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("long_var_2(x + 10) - long_var_42(x - 10)")
+				.parse()
+				.resolve_with(
+					{{"x", 4.0L}, {"long_var_2", 10.0L}, {"long_var_42", 14.0L}}
+				),
+			224.0L
+		),
+		"multiple long variables, with no * between paren"
+	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("(x + 10)long_var_2 - (x - 10)long_var_42")
+				.parse()
+				.resolve_with(
+					{{"x", 4.0L}, {"long_var_2", 10.0L}, {"long_var_42", 14.0L}}
+				),
+			224.0L
+		),
+		"multiple long variables (after paren), with no * between paren"
+	);
+	tester_parser.register_test(
+		is_equal(
+			Parser<long double>("(x + 10)(x + 10)")
+				.parse()
+				.resolve_with({{"x", 2.0L}}),
+			144.0L
+		),
+		"(x + 10)(x + 10) 'Parenthesis multiplication'"
+	);
 	return tester_parser.run_tests();
 }
 } // namespace test

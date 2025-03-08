@@ -253,6 +253,20 @@ bool test_lexer(void) {
 		},
 		"((((10 + 5) * (2 - 4))))"
 	);
+	tester_lexer_format.register_test(
+		[]() {
+			std::vector<Token> answer = {{TokenType::Identifier, "e2"}};
+			return is_lexer_equal(Lexer("e2"), answer);
+		},
+		"e2 - variable with digit in name"
+	);
+	tester_lexer_format.register_test(
+		[]() {
+			std::vector<Token> answer = {{TokenType::Identifier, "e_2"}};
+			return is_lexer_equal(Lexer("e_2"), answer);
+		},
+		"e_2 - variable with digit in name"
+	);
 
 	success &= tester_lexer_format.run_tests();
 

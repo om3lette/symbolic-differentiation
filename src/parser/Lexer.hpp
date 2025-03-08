@@ -43,6 +43,8 @@ class Lexer {
 
 	bool is_reserved(const std::string &str) const;
 	static std::string to_lower(std::string str);
+	bool is_var_suitable(char c) const;
+	Token push_mult(void);
 
   public:
 	Lexer(const std::string &s);

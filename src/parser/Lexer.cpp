@@ -34,6 +34,12 @@ bool Lexer::is_reserved(const std::string &str) const {
 	return reserved_words.find(str) != reserved_words.end();
 }
 
+// Returns whether or not current character is allowed in variable name
+bool Lexer::is_var_suitable(char c) const {
+	// Allow [a-z0-9_]
+	return std::isdigit(c) || std::isalpha(c) || c == '_';
+};
+
 // Returns the respective identifier Token
 // Possible returned token types:
 // 1. `TokenType::Complex`
@@ -62,15 +68,17 @@ Token Lexer::deduce_identifier(const std::string &value) {
 	return Token(TokenType::Identifier, value);
 }
 
+Token Lexer::push_mult(void) {
+	add_mult = false;
+	prev_token_type = TokenType::Operator;
+	return Token(TokenType::Operator, "*");
+};
+
 // Parses the string passed on initialization and returns the next `Token` token
 // Throws `std::runtime_error` if the given string is an incorrect equation
 // Throws `std::invalid_argument` if a reserved word is being used as a variable name
 Token Lexer::next_token() {
-	if (add_mult) {
-		add_mult = false;
-		prev_token_type = TokenType::Operator;
-		return Token(TokenType::Operator, "*");
-	}
+	if (add_mult) return push_mult();
 
 	// Skip whitespace
 	while (std::isspace(peek())) advance();
@@ -98,7 +106,7 @@ Token Lexer::next_token() {
 	// Handle identifiers and reserved words
 	if (std::isalpha(peek())) {
 		std::string accumulator = "";
-		while (std::isalpha(peek())) {
+		while (is_var_suitable(peek())) {
 			accumulator += peek();
 			advance();
 		}
@@ -130,6 +138,8 @@ Token Lexer::next_token() {
 		return_token = Token(TokenType::Operator, std::string(1, peek()));
 		break;
 	case '(':
+		// Allow parenthesis "multiplication" e.g (x + 2)(x - 2)
+		if (prev_token_type == TokenType::RightParen) return push_mult();
 		// clang-format off
 		if (
 			prev_token_type != TokenType::Operator && prev_token_type != TokenType::Function &&
@@ -153,7 +163,7 @@ Token Lexer::next_token() {
 	}
 	advance();
 
-	// Handle implicit multiplication after a right parenthesis
+	// Handle implicit multiplication after a right parenthesis. E.g (x + 2)2
 	if (return_token.type == TokenType::RightParen &&
 		(std::isalpha(peek()) || std::isdigit(peek()))) {
 		add_mult = true;
