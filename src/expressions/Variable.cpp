@@ -4,7 +4,7 @@
 namespace Derivative {
 
 template <typename T>
-Variable<T>::Variable(std::string var) : value(to_lower(var)){};
+Variable<T>::Variable(const std::string var) : value(to_lower(var)){};
 
 template <typename T>
 std::shared_ptr<BaseExpression<T>> Variable<T>::diff(const std::string &by

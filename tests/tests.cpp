@@ -41,6 +41,8 @@ int main(void) {
 	success &= test_lexer();
 	success &= test_parser();
 
+	success &= test_prettify();
+
 	if (!success) throw std::logic_error("\033[1;31mSOME TESTS FAILED!\033[0m");
 	std::cout << "\033[1;32m\nALL TESTS PASSED SUCCESSFULLY!\033[0m\n"
 			  << std::endl;

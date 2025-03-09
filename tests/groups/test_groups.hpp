@@ -25,6 +25,8 @@ bool test_multiplication(void);
 bool test_division(void);
 bool test_power(void);
 
+bool test_prettify(void);
+
 bool test_expression(void);
 } // namespace test
 

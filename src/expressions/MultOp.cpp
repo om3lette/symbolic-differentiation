@@ -30,6 +30,10 @@ template <typename T> T MultOp<T>::resolve() const {
 };
 
 template <typename T> std::string MultOp<T>::to_string(void) const {
+	if (is_const(left) && is_var(right))
+		return left->to_string() + right->to_string();
+	if (is_const(right) && is_var(left))
+		return right->to_string() + left->to_string();
 	return "(" + left->to_string() + ") * (" + right->to_string() + ")";
 };
 

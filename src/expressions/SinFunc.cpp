@@ -32,10 +32,8 @@ template <typename T>
 std::shared_ptr<BaseExpression<T>> SinFunc<T>::prettify() const {
 	std::shared_ptr<BaseExpression<T>> new_arg = argument->prettify();
 
-	// clang-format off
 	if (is_const(new_arg))
 		return std::make_shared<Constant<T>>(std::sin(new_arg->resolve()));
-	// clang-format on
 	return std::make_shared<SinFunc<T>>(new_arg);
 }
 

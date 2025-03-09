@@ -252,6 +252,40 @@ bool test_parser(void) {
 		),
 		"Uppercase variable and functions (should be converted to lower)"
 	);
+	tester_parser.register_test(
+		is_within_tolerance(
+			Parser<long double>(
+				Parser<long double>("cos(3x)").parse().to_string()
+			)
+				.parse()
+				.resolve_with({{"x", pi / 3}}),
+			-1.0L
+		),
+		"Parser(Parser(expr_string).to_string) == Parser(expr_string) #1"
+	);
+	tester_parser.register_test(
+		is_within_tolerance(
+			Parser<long double>(Parser<long double>("12 * x").parse().to_string(
+								))
+				.parse()
+				.resolve_with({{"x", 2}}),
+			24.0L
+		),
+		"Parser(Parser(expr_string).to_string) == Parser(expr_string) #2"
+	);
+	tester_parser.register_test(
+		is_within_tolerance(
+			Parser<long double>(Parser<long double>("cos(x ^ 0.5)")
+									.parse()
+									.diff("x")
+									.prettify()
+									.to_string())
+				.parse()
+				.resolve_with({{"x", pi}}),
+			-0.276378L
+		),
+		"Parser(Parser(expr_string).to_string) == Parser(expr_string) #3"
+	);
 	return tester_parser.run_tests();
 }
 } // namespace test

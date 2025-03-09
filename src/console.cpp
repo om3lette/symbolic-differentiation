@@ -17,17 +17,22 @@ bool is_complex(const std::string &val) {
 template <typename T, typename VarMap>
 std::string run_task(
 	Derivative::Expression<T> expr, bool to_diff, bool to_eval,
-	const std::string &diff_by, const VarMap &values
+	const std::string &diff_by, const VarMap &values, bool prettify = true
 ) {
 	std::stringstream oss;
-	if (to_diff)
-		oss << "Differentiated: " << expr.diff(diff_by).prettify().to_string();
+	if (to_diff) {
+		Derivative::Expression<T> diff_expr = expr.diff(diff_by);
+		if (prettify) diff_expr = diff_expr.prettify();
+		oss << "Differentiated: " << diff_expr.to_string();
+	}
+
 	if (to_eval) oss << "Evaluated: " << expr.resolve_with(values);
 	return oss.str();
 }
 int main(int argc, char *argv[]) {
 	std::string expression_string, diff_by;
-	bool eval_expr = false, diff_expr = false, contains_complex = false;
+	bool eval_expr = false, diff_expr = false, contains_complex = false,
+		 no_prettify = false;
 	VariableType variables;
 	ComplexVariableType complex_variables;
 	std::regex complex_regex(R"(([+-]?\d*\.?\d+)([+-]\d*\.?\d*)i)");
@@ -44,6 +49,8 @@ int main(int argc, char *argv[]) {
 			if (++i >= argc)
 				throw std::invalid_argument("No value specified for --by");
 			diff_by = argv[i];
+		} else if (arg == "--no-prettify" || arg == "-np") {
+			no_prettify = true;
 		} else if (arg.find("=") != std::string::npos) {
 			auto pos = arg.find("=");
 			std::string var_name = to_lower(arg.substr(0, pos)),
@@ -75,14 +82,15 @@ int main(int argc, char *argv[]) {
 			);
 		std::cout << run_task(
 						 expression, diff_expr, eval_expr, diff_by,
-						 complex_variables
+						 complex_variables, !no_prettify
 					 )
 				  << "\n";
 	} else {
 		auto expression =
 			Derivative::Expression<long double>::from_string(expression_string);
 		std::cout << run_task(
-						 expression, diff_expr, eval_expr, diff_by, variables
+						 expression, diff_expr, eval_expr, diff_by, variables,
+						 !no_prettify
 					 )
 				  << "\n";
 	}

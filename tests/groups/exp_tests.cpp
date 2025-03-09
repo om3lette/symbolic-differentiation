@@ -24,7 +24,7 @@ bool test_exp(void) {
 					std::make_shared<Variable<long double>>("x")
 				)
 			)->to_string(),
-			std::string("e^((4) * (x))")
+			std::string("e^(4x)")
 		),
 		"to_string e^(4 * x)"
 	);

@@ -24,7 +24,7 @@ bool test_cos(void) {
 						std::make_shared<Variable<long double>>("x")
 					)
 				)->to_string(),
-				std::string("cos((4) * (x))")
+				std::string("cos(4x)")
 			),
 			"to_string cos(4 * x)"
 		);

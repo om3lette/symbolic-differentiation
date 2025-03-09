@@ -24,7 +24,7 @@ bool test_sin(void) {
 					std::make_shared<Variable<long double>>("x")
 				)
 			)->to_string(),
-			std::string("sin((4) * (x))")
+			std::string("sin(4x)")
 		),
 		"to_string sin(4 * x)"
 	);

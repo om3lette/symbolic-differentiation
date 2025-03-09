@@ -101,7 +101,7 @@ template <typename T> class Variable : public BaseExpression<T> {
 	std::string value;
 
   public:
-	explicit Variable(std::string var);
+	Variable(const std::string var);
 
 	virtual std::shared_ptr<BaseExpression<T>> diff(const std::string &by
 	) const override;

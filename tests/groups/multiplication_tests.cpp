@@ -13,7 +13,7 @@ bool test_multiplication(void) {
                 std::make_shared<Constant<long double>>(25.0L),
                 std::make_shared<Variable<long double>>("x")
             )->to_string(),
-            std::string("(25) * (x)")
+            std::string("25x")
         ),
         "to_string 25 * x"
     );
@@ -23,9 +23,9 @@ bool test_multiplication(void) {
                 std::make_shared<Constant<std::complex<long double>>>(std::complex<long double>(25.0L, 10.25L)),
                 std::make_shared<Variable<std::complex<long double>>>("x")
             )->to_string(),
-            std::string("((25 + 10.25i)) * (x)")
+            std::string("(25 + 10.25i)x")
         ),
-        "to_string complex (25 + 10.25i) * x"
+        "to_string complex (25 + 10.25i)x"
     );
     tester_multiplication.register_test(
         is_equal(
@@ -86,7 +86,7 @@ bool test_multiplication(void) {
                 std::make_shared<Variable<long double>>("x"),
                 std::make_shared<Constant<long double>>(12.0L)
             )->diff("x")->to_string(),
-            std::string("((1) * (12) + (x) * (0))")
+            std::string("((1) * (12) + 0x)")
         ),
         "diff()->resolve() d/dx 12x = 12"
     );
@@ -99,7 +99,7 @@ bool test_multiplication(void) {
                 ),
                 std::make_shared<Constant<long double>>(12.0L)
             )->diff("y")->to_string(),
-            std::string("((((0) * (y) + (x) * (1))) * (12) + ((x) * (y)) * (0))")
+            std::string("(((0y + 1x)) * (12) + ((x) * (y)) * (0))")
         ),
         "diff()->resolve() d/dy x * y * 12 = 12x"
     );
