@@ -29,6 +29,8 @@ template <typename T> T SubOp<T>::resolve() const {
 }
 
 template <typename T> std::string SubOp<T>::to_string() const {
+	if (is_zero(left)) return "-(" + right->to_string() + ")";
+	if (is_zero(right)) return "-(" + left->to_string() + ")";
 	return "(" + left->to_string() + " - " + right->to_string() + ")";
 }
 
@@ -37,7 +39,6 @@ std::shared_ptr<BaseExpression<T>> SubOp<T>::prettify() const {
 	auto new_left = left->prettify();
 	auto new_right = right->prettify();
 
-	if (is_zero(new_left)) return new_right;
 	if (is_zero(new_right)) return new_left;
 	if (is_const(new_left) && is_const(new_right))
 		return std::make_shared<Constant<T>>(

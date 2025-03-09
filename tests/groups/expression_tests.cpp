@@ -60,7 +60,7 @@ bool test_expression(void) {
 				.diff("x")
 				.to_string(),
 			std::string(
-				"((((cos(x)) * (1)) * (x) - (sin(x)) * (1))) / ((x) ^ (2))"
+				"((((cos(x)) * (1)) * (x) - (sin(x)) * (1))) / ((x) ^ 2)"
 			)
 		),
 		"d/dx sin(x)/x = (cos(x) * x - sin(x)) / x^2"

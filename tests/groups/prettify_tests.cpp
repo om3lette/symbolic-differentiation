@@ -5,7 +5,7 @@ using namespace utils;
 
 namespace test {
 bool test_prettify(void) {
-	test::Tester tester_prettify("");
+	test::Tester tester_prettify("Prettify");
 	tester_prettify.register_test(
 		is_within_tolerance(
 			std::stold(Expression<long double>::from_string("e^(1 + 1)x")
@@ -34,9 +34,7 @@ bool test_prettify(void) {
 				.diff("x")
 				.prettify()
 				.to_string(),
-			std::string(
-				"(((cos(x)) * ((x + 10)) - sin(x))) / (((x + 10)) ^ (2))"
-			)
+			std::string("(((cos(x)) * ((x + 10)) - sin(x))) / (((x + 10)) ^ 2)")
 		),
 		"d/dx sin(x) / (x + 10)"
 	);
@@ -47,9 +45,19 @@ bool test_prettify(void) {
 				.diff("x")
 				.prettify()
 				.to_string(),
-			std::string("(((cos(x)) * (x) - sin(x))) / ((x) ^ (2))")
+			std::string("(((cos(x)) * (x) - sin(x))) / ((x) ^ 2)")
 		),
 		"d/dx sin(x)/x = (cos(x) * x - sin(x)) / x^2"
+	);
+	tester_prettify.register_test(
+		is_equal(
+			Expression<long double>::from_string("-x")
+				.diff("x")
+				.prettify()
+				.to_string(),
+			std::string("-1")
+		),
+		"d/dx x = -1"
 	);
 	return tester_prettify.run_tests();
 }

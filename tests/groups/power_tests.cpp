@@ -13,7 +13,7 @@ bool test_power(void) {
 				std::make_shared<Constant<long double>>(25.0L),
 				std::make_shared<Variable<long double>>("x")
 			)->to_string(),
-			std::string("(25) ^ (x)")
+			std::string("25 ^ (x)")
 		),
 		"to_string 25 ^ x"
 	);
@@ -23,7 +23,7 @@ bool test_power(void) {
 				std::make_shared<Constant<std::complex<long double>>>(std::complex<long double>(25.0L, 10.25L)),
 				std::make_shared<Variable<std::complex<long double>>>("x")
 			)->to_string(),
-			std::string("((25 + 10.25i)) ^ (x)")
+			std::string("(25 + 10.25i) ^ (x)")
 		),
 		"to_string complex (25 + 10.25i) ^ x"
 	);

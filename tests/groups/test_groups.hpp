@@ -28,6 +28,7 @@ bool test_power(void);
 bool test_prettify(void);
 
 bool test_expression(void);
+bool test_readme(void);
 } // namespace test
 
 #endif

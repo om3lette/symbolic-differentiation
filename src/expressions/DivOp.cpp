@@ -36,6 +36,10 @@ template <typename T> T DivOp<T>::resolve() const {
 };
 
 template <typename T> std::string DivOp<T>::to_string(void) const {
+	if (is_const(right))
+		return "(" + left->to_string() + ") / " + right->to_string();
+	if (is_const(left))
+		return left->to_string() + " / (" + right->to_string() + ")";
 	return "(" + left->to_string() + ") / (" + right->to_string() + ")";
 };
 
