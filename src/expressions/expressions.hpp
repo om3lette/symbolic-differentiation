@@ -4,7 +4,6 @@
 #include "expressions_utils.hpp"
 
 #include <complex>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <type_traits>

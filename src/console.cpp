@@ -1,4 +1,4 @@
-#include "./expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 #include "string_utils.hpp"
 
 #include <iostream>
