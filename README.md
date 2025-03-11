@@ -98,3 +98,21 @@ std::cout << "Diff out: " << Expression<long double>::from_string("12x * y").dif
 ### Arguments:
 
 - `RELEASE` values: `1` - adds optimization flags when compiling
+
+## Docker image
+
+```bash
+# Build image
+docker build -t symbolic-diff .
+```
+
+```bash
+# Run tests
+docker run symbolic-diff
+```
+
+```bash
+# Run eval/diff
+docker run symbolic-diff ./differentiator --eval "x + y" x=2 y=3 && \
+docker run symbolic-diff ./differentiator --diff "sin(x)/x" --by x
+```
