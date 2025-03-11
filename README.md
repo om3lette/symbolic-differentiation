@@ -72,12 +72,12 @@ std::cout << "Diff out: " << Expression<long double>::from_string("12x * y").dif
 It is not exactly what we have come to expect, is it?
 To partlially fix the problem we can apply `prettify`. It applies basic simplification such as
 
-- x + 0 = 0 + x = x - 0 = x
-- 0 - x = -x
-- x \* 0 = 0 \* x = 0
-- x / 1 = x
-- x^1 = x, 0^x = 0
-- const + const -> const (evaluates the expression for any operator)
+- `x + 0 = 0 + x = x - 0 = x`
+- `0 - x = -x`
+- `x * 0 = 0 * x = 0`
+- `x / 1 = x`
+- `x^1 = x, 0^x = 0`
+- `const + const -> const` (evaluates the expression for any operator)
 
 ```cpp
 std::cout << "Diff out: " << Expression<long double>::from_string("12x * y").diff("y").prettify().to_string() << "\n";
