@@ -80,6 +80,11 @@ int main(int argc, char *argv[]) {
 			Derivative::Expression<std::complex<long double>>::from_string(
 				expression_string
 			);
+		// Convert all `long double` vars tp `std::complex<long double>`
+		for (auto const &var : variables) {
+			complex_variables[var.first] =
+				std::complex<long double>(var.second);
+		}
 		std::cout << run_task(
 						 expression, diff_expr, eval_expr, diff_by,
 						 complex_variables, !no_prettify
